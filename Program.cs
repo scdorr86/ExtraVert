@@ -191,9 +191,8 @@ void FilterLightNeeds()
       lightFilter.Add(plant);
     }
   }
-
-  for (int i=0; i < lightFilter.Count; i++)
-  {
-    Console.WriteLine($"{i + 1}. {lightFilter[i].Species}");
-  }
+    for (int i = 0; i < lightFilter.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {lightFilter[i].Species} with light need of {lightFilter[i].LightNeeds}.");
+    }
 };
