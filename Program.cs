@@ -43,12 +43,19 @@
     AskingPrice = 125.00M,
     City = "Portland",
     Zip = 97035,
-    Sold = false
+    Sold = true
   }
 };
 
+Random random = new Random();
+int randomIndex;
+do
+{
+  randomIndex = random.Next(0, plants.Count);
+}
+while (plants[randomIndex].Sold == true);
+
 string welcome = "Welcome to ExtraVert!";
-ListPlants();
 
 Console.WriteLine(welcome);
 string? choice = null;
@@ -59,30 +66,50 @@ while (choice != "E")
                         B. Post a plant to be adopted
                         C. Adopt a plant
                         D. Delist a plant
-                        E. Exit");
+                        E. See Plant of the Day
+                        F. Search Plants by Light Needs
+                        G. Exit");
     
     choice = Console.ReadLine();
     
-    if (choice == "E")
+    if (choice == "G")
     {
+        Console.Clear();
         Console.WriteLine("Adios, amigo!");
     }
     else if (choice == "B")
     {
-        throw new NotImplementedException("Post a plant to be adopted");
+        Console.WriteLine("Please enter your Plant Information:");
+        PostPlant();
     }
     else if (choice == "C")
     {
-        throw new NotImplementedException("Adopt a plant");
+        Console.WriteLine("Please select plant to Adopt");
+        AdoptPlant();
     }
     else if (choice == "D")
     {
-        throw new NotImplementedException("Delist a plant");
+        Console.WriteLine("Please select a plant to Delist");
+        DelistPlant();
+    }
+    else if (choice == "E")
+    {
+        PlantOfDay();
+        Console.WriteLine("test line");
+    }
+        else if (choice == "F")
+    {
+        FilterLightNeeds();
+        Console.WriteLine("test line");
     }
     else if (choice == "A")
     {
-        // throw new NotImplementedException("Display all plants");
         ListPlants();
+    }
+    else
+    {
+      Console.Clear();
+      Console.WriteLine("Please enter an option letter");
     }
 }
 
@@ -90,6 +117,67 @@ void ListPlants()
 {
   for (int i = 0; i <plants.Count; i++)
   {
-    Console.WriteLine($"{i + 1}. {plants[i].Species}");
+    Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} {(plants[i].Sold ? "was sold" : "is available")} for {plants[i].AskingPrice}");
   }
 }
+
+void PostPlant ()
+{
+  Plant plant = new Plant();
+  
+  Console.WriteLine("Please enter Species");
+  string? speicesInput = Console.ReadLine();
+  plant.Species = speicesInput;
+  
+  Console.WriteLine("Please enter Light needs (1-5)");
+  double lightInput = Convert.ToDouble(Console.ReadLine());
+  plant.LightNeeds = lightInput;
+
+  Console.WriteLine("Please enter Asking Price");
+  decimal priceInput = Convert.ToDecimal(Console.ReadLine());
+  plant.AskingPrice = priceInput;
+
+  Console.WriteLine("Please enter City");
+  string? cityInput = (Console.ReadLine());
+  plant.City = cityInput;
+
+  Console.WriteLine("Please enter Zip Code");
+  int zipInput = Convert.ToInt32(Console.ReadLine());
+  plant.Zip = zipInput;
+
+  plant.Sold = false;
+
+  plants.Add(plant);
+}
+
+void AdoptPlant ()
+{
+    for (int i = 0; i <plants.Count; i++)
+  {
+    Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} {(plants[i].Sold ? "is NOT" : "IS")} available for {plants[i].AskingPrice}");
+  }
+  
+  int adoptInput = Convert.ToInt32(Console.ReadLine());
+  plants[adoptInput - 1].Sold = true;
+}
+
+void DelistPlant ()
+{
+    for (int i = 0; i <plants.Count; i++)
+  {
+    Console.WriteLine($"{i + 1}. {plants[i].Species}");
+  }
+
+  int delistInput = Convert.ToInt32(Console.ReadLine());
+  plants.RemoveAt(delistInput - 1);
+}
+
+void PlantOfDay ()
+{
+    Console.WriteLine($"The plant of the day is {plants[randomIndex].Species} in {plants[randomIndex].City} {(plants[randomIndex].Sold ? " and  it was sold" : "and it is available")} for {plants[randomIndex].AskingPrice}");
+};
+
+void FilterLightNeeds ()
+{
+
+};
