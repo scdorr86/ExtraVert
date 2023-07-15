@@ -194,6 +194,6 @@ void FilterLightNeeds()
 
     for (int i = 0; i < lightFilter.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {lightFilter[i].Species}");
+        Console.WriteLine($"{i + 1}. {lightFilter[i].Species} with light need of {lightFilter[i].LightNeeds}.");
     }
 };
