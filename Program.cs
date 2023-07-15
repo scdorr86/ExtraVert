@@ -178,22 +178,22 @@ void PlantOfDay()
 
 void FilterLightNeeds()
 {
-    List<Plant> lightFilter = new List<Plant>();
+  List<Plant> lightFilter = new List<Plant>();
 
-    Console.WriteLine("Please enter a maximum light need");
+  Console.WriteLine("Please enter a maximum light need");
 
-    double maxLightInput = Convert.ToDouble(Console.ReadLine());
+  double maxLightInput = Convert.ToDouble(Console.ReadLine());
 
-    foreach (Plant plant in plants)
+  foreach (Plant plant in plants)
+  {
+    if (plant.LightNeeds <= maxLightInput)
     {
-        if (plant.LightNeeds <= maxLightInput)
-        {
-            lightFilter.Add(plant);
-        }
+      lightFilter.Add(plant);
     }
+  }
 
-    for (int i = 0; i < lightFilter.Count; i++)
-    {
-        Console.WriteLine($"{i + 1}. {lightFilter[i].Species}");
-    }
+  for (int i=0; i < lightFilter.Count; i++)
+  {
+    Console.WriteLine($"{i + 1}. {lightFilter[i].Species}");
+  }
 };
