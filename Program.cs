@@ -7,7 +7,8 @@
     AskingPrice = 100.00M,
     City = "Nashville",
     Zip = 37221,
-    Sold = false
+    Sold = false,
+    AvailableUntil = new DateTime(2023, 12, 31)
   },
     new Plant()
   {
@@ -16,7 +17,8 @@
     AskingPrice = 150.00M,
     City = "Seattle",
     Zip = 98101,
-    Sold = false
+    Sold = false,
+    AvailableUntil = new DateTime(2023, 10, 31)
   },
     new Plant()
   {
@@ -25,7 +27,8 @@
     AskingPrice = 50.00M,
     City = "Palo Alto",
     Zip = 94304,
-    Sold = false
+    Sold = false,
+    AvailableUntil = new DateTime(2023, 9, 30)
   },
     new Plant()
   {
@@ -34,7 +37,8 @@
     AskingPrice = 175.00M,
     City = "Denver",
     Zip = 80014,
-    Sold = false
+    Sold = false,
+    AvailableUntil = new DateTime(2023, 5, 31)
   },
     new Plant()
   {
@@ -43,7 +47,8 @@
     AskingPrice = 125.00M,
     City = "Portland",
     Zip = 97035,
-    Sold = true
+    Sold = true,
+    AvailableUntil = new DateTime(2023, 7, 31)
   }
 };
 
@@ -59,7 +64,7 @@ string welcome = "Welcome to ExtraVert!";
 
 Console.WriteLine(welcome);
 string? choice = null;
-while (choice != "G")
+while (choice != "H")
 {
     Console.WriteLine(@"Choose an option:
                         A. Display All Plants
@@ -68,11 +73,12 @@ while (choice != "G")
                         D. Delist a plant
                         E. See Plant of the Day
                         F. Search Plants by Light Needs
-                        G. Exit");
+                        G. Plants Available to Adopt
+                        H. Exit");
 
     choice = Console.ReadLine();
 
-    if (choice == "G")
+    if (choice == "H")
     {
         Console.Clear();
         Console.WriteLine("Adios, amigo!");
@@ -101,6 +107,10 @@ while (choice != "G")
     {
         FilterLightNeeds();
     }
+    else if (choice == "G")
+    {
+        AdoptablePlants();
+    }
     else if (choice == "A")
     {
         ListPlants();
@@ -116,7 +126,7 @@ void ListPlants()
 {
     for (int i = 0; i < plants.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} {(plants[i].Sold ? "was sold" : "is available")} for {plants[i].AskingPrice}");
+        Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} {(plants[i].Sold ? "was sold" : "is available")} for {plants[i].AskingPrice}. This post expires on {plants[i].AvailableUntil}.");
     }
 }
 
@@ -143,6 +153,10 @@ void PostPlant()
     Console.WriteLine("Please enter Zip Code");
     int zipInput = Convert.ToInt32(Console.ReadLine());
     plant.Zip = zipInput;
+
+    Console.WriteLine("Please enter the date this post should expire");
+
+    DatePrompt();
 
     plant.Sold = false;
 
@@ -194,5 +208,44 @@ void FilterLightNeeds()
     for (int i = 0; i < lightFilter.Count; i++)
     {
         Console.WriteLine($"{i + 1}. {lightFilter[i].Species} with light need of {lightFilter[i].LightNeeds}.");
+    }
+};
+
+void DatePrompt ()
+{
+      Plant plant = new Plant();
+
+      Console.WriteLine("Day: "); 
+      var day = Convert.ToInt32(Console.ReadLine());
+
+      Console.WriteLine("Month: ");
+      var month = Convert.ToInt32(Console.ReadLine());
+
+      Console.WriteLine("Year: ");
+      var year = Convert.ToInt32(Console.ReadLine());
+
+      Console.WriteLine(year);
+      Console.WriteLine(month);
+    
+      plant.AvailableUntil = new DateTime(year, month, day);
+}
+
+void AdoptablePlants()
+{
+    List<Plant> AdoptablePlants = new List<Plant>();
+    
+    DateTime CurrentDate = DateTime.Now;
+    
+    foreach (Plant plant in plants)
+    {
+        if (plant.AvailableUntil < CurrentDate && !plant.Sold)
+        {
+            AdoptablePlants.Add(plant);
+        }
+    }
+    // print out the latest products to the console 
+    for (int i = 0; i < AdoptablePlants.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {AdoptablePlants[i].Species}");
     }
 };

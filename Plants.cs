@@ -6,4 +6,5 @@ public class Plant
   public string? City { get; set; }
   public int Zip { get; set; }
   public bool Sold { get; set; }
+  public DateTime AvailableUntil { get; set; }
 }
