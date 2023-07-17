@@ -64,7 +64,7 @@ string welcome = "Welcome to ExtraVert!";
 
 Console.WriteLine(welcome);
 string? choice = null;
-while (choice != "H")
+while (choice != "I")
 {
     Console.WriteLine(@"Choose an option:
                         A. Display All Plants
@@ -74,11 +74,12 @@ while (choice != "H")
                         E. See Plant of the Day
                         F. Search Plants by Light Needs
                         G. Plants Available to Adopt
-                        H. Exit");
+                        H. Plant Statisics
+                        I. Exit");
 
     choice = Console.ReadLine();
 
-    if (choice == "H")
+    if (choice == "I")
     {
         Console.Clear();
         Console.WriteLine("Adios, amigo!");
@@ -110,6 +111,10 @@ while (choice != "H")
     else if (choice == "G")
     {
         AdoptablePlants();
+    }
+        else if (choice == "H")
+    {
+        Statistics();
     }
     else if (choice == "A")
     {
@@ -156,7 +161,7 @@ void PostPlant()
 
     Console.WriteLine("Please enter the date this post should expire");
 
-    DatePrompt();
+    DatePrompt(plant);
 
     plant.Sold = false;
 
@@ -211,21 +216,29 @@ void FilterLightNeeds()
     }
 };
 
-void DatePrompt ()
+void DatePrompt (Plant plant)
 {
-      Plant plant = new Plant();
+      Console.WriteLine("Day: ");
+      int day = 0;
+      int month = 0;
+      int year = 0;
+      try
+      { 
+        day = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Month: ");
 
-      Console.WriteLine("Day: "); 
-      var day = Convert.ToInt32(Console.ReadLine());
+        month = Convert.ToInt32(Console.ReadLine());
 
-      Console.WriteLine("Month: ");
-      var month = Convert.ToInt32(Console.ReadLine());
-
-      Console.WriteLine("Year: ");
-      var year = Convert.ToInt32(Console.ReadLine());
-
-      Console.WriteLine(year);
-      Console.WriteLine(month);
+        Console.WriteLine("Year: ");
+        year = Convert.ToInt32(Console.ReadLine());
+      }
+      catch (FormatException ex)
+      {
+        Console.WriteLine(ex);
+        Console.WriteLine("Please enter day/month/year in number format");
+        DatePrompt(plant);
+      }
+      
     
       plant.AvailableUntil = new DateTime(year, month, day);
 }
@@ -238,7 +251,7 @@ void AdoptablePlants()
     
     foreach (Plant plant in plants)
     {
-        if (plant.AvailableUntil < CurrentDate && !plant.Sold)
+        if (plant.AvailableUntil > CurrentDate && !plant.Sold)
         {
             AdoptablePlants.Add(plant);
         }
@@ -248,4 +261,60 @@ void AdoptablePlants()
     {
         Console.WriteLine($"{i + 1}. {AdoptablePlants[i].Species}");
     }
+};
+
+void Statistics ()
+{
+  List<decimal> Prices = new List<decimal>();
+  foreach (Plant plant in plants)
+  {
+    Prices.Add(plant.AskingPrice);
+  }
+  decimal minPrice = Prices.Min();
+  Console.WriteLine($"The lowest priced plant is: {minPrice}");
+
+  List<Plant> AvailablePlants = new List<Plant>();
+  foreach (Plant plant in plants)
+  {
+    if (plant.AvailableUntil > DateTime.Now && !plant.Sold)
+        {
+            AvailablePlants.Add(plant);
+        }
+  }
+  int available = AvailablePlants.Count();
+  Console.WriteLine($"Plants currently available: {available}");
+
+  List<double> LightNeed = new List<double>();
+  foreach (Plant plant in plants)
+  {
+    LightNeed.Add(plant.LightNeeds);
+  }
+  double maxLight = LightNeed.Max();
+  foreach (Plant plant in plants)
+  {
+    if (plant.LightNeeds == maxLight)
+      {
+        Console.WriteLine($"The plant with the hightest light needs is: {plant.Species}.");  
+      }
+  }
+
+  List<double> AvgLightNeed = new List<double>();
+  foreach (Plant plant in plants)
+  {
+    AvgLightNeed.Add(plant.LightNeeds);
+  }
+  double avgLight = AvgLightNeed.Average();
+  Console.WriteLine($"The average light need of all ExtraVert plants is: {avgLight}.");
+
+  List<Plant> isAdopted = new List<Plant>();
+  foreach (Plant plant in plants)
+  {
+    if (plant.Sold == true)
+    {
+      isAdopted.Add(plant);  
+    }
+  }
+  double adoptionRate = (double)isAdopted.Count()/plants.Count();
+  double adoptionPercent = adoptionRate * 100;
+  Console.WriteLine($"The percentage of adopted ExtraVert plants is: {adoptionPercent}%.");  
 };
